@@ -1,3 +1,4 @@
+import clients.UserClient;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -9,15 +10,12 @@ import java.time.Clock;
 public class UserSignupTest extends BaseAPITest{
     @Test
     public void successfulRegistration(){
-        String singupEndPoint = "/api/auth/signup";
-        String email = "demo2@ultralession.com";
-        String password = "32423443";
-        String signupRequestBody = String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email,password);
 
-       Response response = RestAssured.given()
-                .contentType(ContentType.JSON)
-                .body(signupRequestBody)
-                .post(singupEndPoint);
+       String email = "demo3@ultralession.com";
+       String password = "32423443";
+
+       UserClient userClient = new UserClient();
+       Response response = userClient.createUser(email,password);
 
        int statusCode = response.statusCode();
        String authenticatedEmail = response.jsonPath().get("data.user.email");
