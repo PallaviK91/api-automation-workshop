@@ -1,0 +1,37 @@
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.time.Clock;
+
+public class UserSignupTest extends BaseAPITest{
+    @Test
+    public void successfulRegistration(){
+        String singupEndPoint = "/api/auth/signup";
+        String email = "demo2@ultralession.com";
+        String password = "32423443";
+        String signupRequestBody = String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email,password);
+
+       Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(signupRequestBody)
+                .post(singupEndPoint);
+
+       int statusCode = response.statusCode();
+       String authenticatedEmail = response.jsonPath().get("data.user.email");
+       String role = response.jsonPath().get("data.user.role");
+       String accessToken = response.jsonPath().get("data.session.access_token");
+
+       System.out.println("statusCode - " + statusCode);
+       System.out.println("authenticatedEmail - " + authenticatedEmail);
+       System.out.println("role - " + role);
+       System.out.println("accessToken - " + accessToken);
+
+        Assert.assertEquals(statusCode, 201, "Failed due to wrong status code");
+        Assert.assertEquals(authenticatedEmail, email, "Failed due to wrong email");
+        Assert.assertEquals(role, "authenticated", "Failed to validate the role to be authenticated");
+        Assert.assertNotNull(accessToken, "Failed as access token is null");
+    }
+}
