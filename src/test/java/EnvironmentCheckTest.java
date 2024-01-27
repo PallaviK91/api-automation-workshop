@@ -16,6 +16,6 @@ public class EnvironmentCheckTest extends BaseAPITest {
         String message = response.jsonPath().getString("message");
 
         Assert.assertEquals(statusCode, 200, "The status code is not the expected 200.");
-        Assert.assertEquals(message, "ok", "The API response message is not 'ok'.");
+         Assert.assertEquals(message, "ok", "The API response message is not 'ok'.");
     }
 }
